@@ -6,6 +6,8 @@ add_library(resource_core STATIC
         include/resource_core/resource_manager.hpp
 )
 
+target_compile_definitions(resource_core PUBLIC _CRT_SECURE_NO_WARNINGS)
+
 target_link_libraries(resource_core PRIVATE project_warnings)
 if (TARGET project_sanitizers)
     target_link_libraries(resource_core PRIVATE project_sanitizers)
