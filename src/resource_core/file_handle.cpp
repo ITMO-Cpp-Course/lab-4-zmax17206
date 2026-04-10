@@ -61,7 +61,10 @@ std::string FileHandle::read_all()
     std::fseek(file_, 0, SEEK_SET);
 
     std::string result(static_cast<std::size_t>(size), '\0');
-    std::fread(result.data(), 1, static_cast<std::size_t>(size), file_);
+    if (std::fread(result.data(), 1, static_cast<std::size_t>(size), file_) != static_cast<std::size_t>(size))
+    {
+        throw ResourceError("Read failed for file: " + path_);
+    }
     return result;
 }
 
