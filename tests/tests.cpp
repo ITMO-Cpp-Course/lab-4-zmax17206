@@ -71,34 +71,14 @@ TEST_CASE("FileHandle::close makes is_open() return false", "[FileHandle]")
     REQUIRE_FALSE(fh.is_open());
 }
 
-TEST_CASE("FileHandle write and read round-trip", "[FileHandle]")
+TEST_CASE("FileHandle::close is safe to call multiple times", "[FileHandle]")
 {
     auto path = make_temp_file();
-    const std::string content = "qwr ewq";
-
-    {
-        FileHandle writer(path, "w");
-        writer.write(content);
-    }
-
-    FileHandle reader(path, "r");
-    REQUIRE(reader.read_all() == content);
-}
-
-TEST_CASE("Reading from a closed FileHandle throws ResourceError", "[FileHandle]")
-{
-    auto path = make_temp_file("x");
     FileHandle fh(path, "r");
     fh.close();
-    REQUIRE_THROWS_AS(fh.read_all(), ResourceError);
-}
-
-TEST_CASE("Writing to a closed FileHandle throws ResourceError", "[FileHandle]")
-{
-    auto path = make_temp_file();
-    FileHandle fh(path, "w");
-    fh.close();
-    REQUIRE_THROWS_AS(fh.write("data"), ResourceError);
+    REQUIRE_FALSE(fh.is_open());
+    fh.close(); // второй вызов не должен падать
+    REQUIRE_FALSE(fh.is_open());
 }
 
 TEST_CASE("FileHandle is move-constructible", "[FileHandle][move]")

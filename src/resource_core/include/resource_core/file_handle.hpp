@@ -23,8 +23,6 @@ class FileHandle
     [[nodiscard]] bool is_open() const noexcept;
     [[nodiscard]] const std::string& path() const noexcept;
 
-    std::string read_all();
-    void write(const std::string& data);
     void close() noexcept;
 
   private:
